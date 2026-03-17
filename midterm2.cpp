@@ -292,6 +292,32 @@ void runSimulation(DoublyLinkedList& line, const vector<string>& names) {
     cout << "    Resulting line:" << endl;
     line.printFormattedLine();
     cout << endl;
+
+    // Step 1–19
+    for (int step = 1; step <= 19; step++) {
+        cout << "Time step #" << step << ":" << endl;
+        int size = line.getSize();
+
+        // 40% chance serve first customer
+        if (size > 0 && rand() % 100 < 40) {
+            Customer served = line.getFrontCustomer();
+            cout << "    " << served.getName() << " is served" << endl;
+            line.pop_front();
+            size--;
+        }
+
+        // 60% chance a new customer joins line
+        if (rand() % 100 < 60) {
+            Customer newCust = getRandomCustomer(names);
+            line.push_back(newCust);
+            cout << "    " << newCust.getName() << " joins the line" << endl;
+        }
+
+        cout << "    Resulting line:" << endl;
+        line.printFormattedLine();
+        cout << endl;
+    }
+
 }
 
 int main() {
