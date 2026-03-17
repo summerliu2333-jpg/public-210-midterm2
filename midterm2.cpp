@@ -1,16 +1,34 @@
 //COMSC-210-5068, Midterm2, Yang Liu
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <string>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
 const int MIN_NR = 10, MAX_NR = 99, MIN_LS = 5, MAX_LS = 20;
 
+// class to store name and VIP status
+class Customer {
+private:
+    string name;
+    bool isVIP;
+
+public:
+    Customer(string n = "", bool vip = false) : name(n), isVIP(vip) {}
+
+    string getName() const { return name; }
+    bool isVIPCustomer() const { return isVIP; }
+};
+
 class DoublyLinkedList {
 private:
     struct Node {
-        int data;
+        Customer data;
         Node* prev;
         Node* next;
-        Node(int val, Node* p = nullptr, Node* n = nullptr) {
+        Node(Customer val, Node* p = nullptr, Node* n = nullptr) {
             data = val; 
             prev = p;
             next = n;
@@ -29,7 +47,7 @@ public:
             return;
         }
 
-        Node* newNode = new Node(value);
+        Node* newNode = new Node(Customer());
         if (!head) {
             head = tail = newNode;
             return;
@@ -59,7 +77,7 @@ public:
 
         Node* temp = head;
         
-        while (temp && temp->data != value)
+        while (temp && temp->data.getName() == to_string(value))
             temp = temp->next;
 
         if (!temp) return; 
@@ -114,7 +132,7 @@ public:
         delete temp;
     }
 
-    void push_back(int v) {
+    void push_back(Customer v) {
         Node* newNode = new Node(v);
         if (!tail)
             head = tail = newNode;
@@ -125,7 +143,7 @@ public:
         }
     }
     
-    void push_front(int v) {
+    void push_front(Customer v) {
         Node* newNode = new Node(v);
         if (!head)
             head = tail = newNode;
@@ -184,7 +202,7 @@ public:
             return;
         }
         while (current) {
-            cout << current->data << " ";
+            cout << current->data.getName() << " ";
             current = current->next;
         }
         cout << endl;
@@ -197,7 +215,7 @@ public:
             return;
         }
         while (current) {
-            cout << current->data << " ";
+            cout << current->data.getName() << " ";
             current = current->prev;
         }
         cout << endl;
