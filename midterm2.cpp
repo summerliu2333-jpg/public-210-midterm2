@@ -220,6 +220,25 @@ public:
         }
         cout << endl;
     }
+
+vector<string> readNames(const string& filename) {
+    vector<string> names;
+    ifstream file(filename);
+    string line;
+    while (getline(file, line)) {
+        if (!line.empty())
+            names.push_back(line);
+    }
+    return names;
+}
+
+//10% VIP chance
+Customer getRandomCustomer(const vector<string>& names) {
+    int idx = rand() % names.size();
+    bool vip = (rand() % 100) < 10;
+    return Customer(names[idx], vip);
+}
+
 };
 
 int main() {
