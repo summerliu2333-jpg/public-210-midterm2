@@ -263,6 +263,11 @@ public:
 
 };
 
+//Prototypes
+vector<string> readNames(const string& filename);
+Customer getRandomCustomer(const vector<string>& names);
+void runSimulation(DoublyLinkedList& line, const vector<string>& names);
+
 vector<string> readNames(const string& filename) {
     vector<string> names;
     ifstream file(filename);
@@ -305,12 +310,24 @@ void runSimulation(DoublyLinkedList& line, const vector<string>& names) {
             line.pop_front();
             size--;
         }
+        // 20% chance last customer leaves
+        if (size > 0 && rand() % 100 < 20) {
+            Customer left = line.getRearCustomer();
+            cout << "    " << left.getName() << " exits the rear of the line" << endl;
+            line.pop_back();
+            size--;
+        }
 
-        // 60% chance a new customer joins line
+        // 60% chance a new customer joins line, VIP goes to front
         if (rand() % 100 < 60) {
             Customer newCust = getRandomCustomer(names);
-            line.push_back(newCust);
-            cout << "    " << newCust.getName() << " joins the line" << endl;
+            if (newCust.isVIPCustomer()) {
+                line.push_front(newCust);
+                cout << "    " << newCust.getName() << " (VIP) joins the front" << endl;
+            } else {
+                line.push_back(newCust);
+                cout << "    " << newCust.getName() << " joins the line" << endl;
+            }
         }
 
         cout << "    Resulting line:" << endl;
