@@ -77,7 +77,7 @@ public:
 
         Node* temp = head;
         
-        while (temp && temp->data.getName() == to_string(value))
+        while (temp && temp->data.getName() != to_string(value))
             temp = temp->next;
 
         if (!temp) return; 
@@ -221,6 +221,48 @@ public:
         cout << endl;
     }
 
+    void printFormattedLine() {
+        Node* current = head;
+        if (!current) {
+            cout << "        List is empty." << endl;
+            return;
+        }
+        while (current) {
+            cout << "        " << current->data.getName() << endl;
+            current = current->next;
+        }
+    }
+
+    int getSize() const {
+        int count = 0;
+        Node* cur = head;
+        while (cur != nullptr) {
+            count++;
+            cur = cur->next;
+        }
+        return count;
+    }
+
+    Customer getFrontCustomer() const {
+        if (head != nullptr)
+            return head->data;
+        return Customer();
+    }
+
+    Customer getRearCustomer() const {
+        if (tail) return tail->data;
+        return Customer();
+    }
+
+    Customer getCustomerAt(int pos) const {
+        if (pos < 1 || !head) return Customer();
+        Node* cur = head;
+        for (int i = 1; i < pos && cur; i++) cur = cur->next;
+        return cur ? cur->data : Customer();
+    }
+
+};
+
 vector<string> readNames(const string& filename) {
     vector<string> names;
     ifstream file(filename);
@@ -239,10 +281,25 @@ Customer getRandomCustomer(const vector<string>& names) {
     return Customer(names[idx], vip);
 }
 
-};
+void runSimulation(DoublyLinkedList& line, const vector<string>& names) {
+    // Initial 5 customers
+    cout << "Store opens:" << endl;
+    for (int i = 0; i < 5; i++) {
+        Customer cust = getRandomCustomer(names);
+        line.push_back(cust);
+        cout << "    " << cust.getName() << " joins the line" << endl;
+    }
+    cout << "    Resulting line:" << endl;
+    line.printFormattedLine();
+    cout << endl;
+}
 
 int main() {
-    cout << MIN_NR + MIN_LS + MAX_NR + MAX_LS;  // dummy statement to avoid compiler warning
+    srand(time(0));
+    vector<string> names = readNames("names.txt");
+    DoublyLinkedList coffeeLine;
+
+    runSimulation(coffeeLine, names);
 
     
     return 0;
